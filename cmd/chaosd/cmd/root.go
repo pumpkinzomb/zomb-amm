@@ -36,8 +36,8 @@ import (
 	"github.com/tendermint/tendermint/libs/log"
 	dbm "github.com/tendermint/tm-db"
 
-	"github.com/cosmos-builders/chaos/app"
-	appparams "github.com/cosmos-builders/chaos/app/params"
+	"github.com/pumpkinzomb/zomb-amm/app"
+	appparams "github.com/pumpkinzomb/zomb-amm/app/params"
 )
 
 // NewRootCmd creates a new root command for a Cosmos SDK application

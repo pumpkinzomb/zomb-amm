@@ -3,7 +3,7 @@ package cmd
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/cosmos-builders/chaos/app"
+	"github.com/pumpkinzomb/zomb-amm/app"
 )
 
 func initSDKConfig() {

@@ -10,7 +10,7 @@ import (
 	abci "github.com/tendermint/tendermint/abci/types"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 
-	chaosapp "github.com/cosmos-builders/chaos/app"
+	chaosapp "github.com/pumpkinzomb/zomb-amm/app"
 )
 
 var (

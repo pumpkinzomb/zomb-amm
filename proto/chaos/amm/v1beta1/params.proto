@@ -1,0 +1,9 @@
+syntax = "proto3";
+package chaos.amm.v1beta1;
+option go_package = "github.com/pumpkinzomb/zomb-amm/x/amm/types";
+
+import "gogoproto/gogo.proto";
+
+message Params {
+    option (gogoproto.goproto_stringer) = false;
+}

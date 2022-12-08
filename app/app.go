@@ -104,8 +104,8 @@ import (
 	tmos "github.com/tendermint/tendermint/libs/os"
 	dbm "github.com/tendermint/tm-db"
 
-	appparams "github.com/cosmos-builders/chaos/app/params"
-	"github.com/cosmos-builders/chaos/docs"
+	appparams "github.com/pumpkinzomb/zomb-amm/app/params"
+	"github.com/pumpkinzomb/zomb-amm/docs"
 )
 
 const (

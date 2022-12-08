@@ -6,8 +6,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/server"
 	svrcmd "github.com/cosmos/cosmos-sdk/server/cmd"
 
-	"github.com/cosmos-builders/chaos/app"
-	"github.com/cosmos-builders/chaos/cmd/chaosd/cmd"
+	"github.com/pumpkinzomb/zomb-amm/app"
+	"github.com/pumpkinzomb/zomb-amm/cmd/chaosd/cmd"
 )
 
 func main() {

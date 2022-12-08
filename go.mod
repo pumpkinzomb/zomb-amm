@@ -1,4 +1,4 @@
-module github.com/cosmos-builders/chaos
+module github.com/pumpkinzomb/zomb-amm
 
 go 1.18
 
