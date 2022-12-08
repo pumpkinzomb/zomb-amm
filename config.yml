@@ -1,0 +1,15 @@
+version: 1
+accounts:
+  - name: alice
+    coins: ["20000000000token", "20000000000stake"]
+  - name: bob
+    coins: ["10000000000token", "10000000000stake"]
+validators:
+  - name: alice
+    bonded: "10000000000stake"
+client:
+  openapi:
+    path: "docs/static/openapi.yml"
+faucet:
+  name: bob
+  coins: ["50000token", "100000stake"]
