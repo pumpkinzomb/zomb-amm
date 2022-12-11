@@ -106,11 +106,14 @@ import (
 
 	appparams "github.com/pumpkinzomb/zomb-amm/app/params"
 	"github.com/pumpkinzomb/zomb-amm/docs"
+	"github.com/pumpkinzomb/zomb-amm/x/amm"
+	ammkeeper "github.com/pumpkinzomb/zomb-amm/x/amm/keeper"
+	ammtypes "github.com/pumpkinzomb/zomb-amm/x/amm/types"
 )
 
 const (
-	AccountAddressPrefix = "cosmos"
-	Name                 = "chaos"
+	AccountAddressPrefix = "zomb"
+	Name                 = "zomb"
 )
 
 func getGovProposalHandlers() []govclient.ProposalHandler {
@@ -156,6 +159,7 @@ var (
 		transfer.AppModuleBasic{},
 		ica.AppModuleBasic{},
 		vesting.AppModuleBasic{},
+		amm.AppModuleBasic{},
 	)
 
 	// module account permissions
@@ -168,6 +172,7 @@ var (
 		stakingtypes.NotBondedPoolName: {authtypes.Burner, authtypes.Staking},
 		govtypes.ModuleName:            {authtypes.Burner},
 		ibctransfertypes.ModuleName:    {authtypes.Minter, authtypes.Burner},
+		ammtypes.ModuleName:            {authtypes.Minter, authtypes.Burner},
 	}
 )
 
@@ -221,6 +226,7 @@ type App struct {
 	ICAHostKeeper    icahostkeeper.Keeper
 	FeeGrantKeeper   feegrantkeeper.Keeper
 	GroupKeeper      groupkeeper.Keeper
+	AMMKeeper        ammkeeper.Keeper
 
 	// make scoped keepers public for test purposes
 	ScopedIBCKeeper      capabilitykeeper.ScopedKeeper
@@ -269,6 +275,7 @@ func New(
 		paramstypes.StoreKey, ibchost.StoreKey, upgradetypes.StoreKey, feegrant.StoreKey, evidencetypes.StoreKey,
 		ibctransfertypes.StoreKey, icahosttypes.StoreKey, capabilitytypes.StoreKey, group.StoreKey,
 		icacontrollertypes.StoreKey,
+		ammtypes.StoreKey,
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
 	memKeys := sdk.NewMemoryStoreKeys(capabilitytypes.MemStoreKey)
@@ -408,6 +415,13 @@ func New(
 		stakingtypes.NewMultiStakingHooks(app.DistrKeeper.Hooks(), app.SlashingKeeper.Hooks()),
 	)
 
+	app.AMMKeeper = ammkeeper.NewKeeper(
+		appCodec,
+		keys[ammtypes.StoreKey],
+		app.GetSubspace(ammtypes.ModuleName),
+		app.BankKeeper,
+	)
+
 	// ... other modules keepers
 
 	// Create IBC Keeper
@@ -524,6 +538,7 @@ func New(
 		evidence.NewAppModule(app.EvidenceKeeper),
 		ibc.NewAppModule(app.IBCKeeper),
 		params.NewAppModule(app.ParamsKeeper),
+		amm.NewAppModule(appCodec, app.AMMKeeper, app.AccountKeeper, app.BankKeeper),
 		transferModule,
 		icaModule,
 	)
@@ -554,6 +569,7 @@ func New(
 		group.ModuleName,
 		paramstypes.ModuleName,
 		vestingtypes.ModuleName,
+		ammtypes.ModuleName,
 	)
 
 	app.mm.SetOrderEndBlockers(
@@ -577,6 +593,7 @@ func New(
 		paramstypes.ModuleName,
 		upgradetypes.ModuleName,
 		vestingtypes.ModuleName,
+		ammtypes.ModuleName,
 	)
 
 	// NOTE: The genutils module must occur after staking so that pools are
@@ -605,6 +622,7 @@ func New(
 		paramstypes.ModuleName,
 		upgradetypes.ModuleName,
 		vestingtypes.ModuleName,
+		ammtypes.ModuleName,
 	)
 
 	// Uncomment if you want to set a custom migration order here.
@@ -632,6 +650,7 @@ func New(
 		groupmodule.NewAppModule(appCodec, app.GroupKeeper, app.AccountKeeper, app.BankKeeper, app.interfaceRegistry),
 		evidence.NewAppModule(app.EvidenceKeeper),
 		ibc.NewAppModule(app.IBCKeeper),
+		amm.NewAppModule(appCodec, app.AMMKeeper, app.AccountKeeper, app.BankKeeper),
 		transferModule,
 	)
 	app.sm.RegisterStoreDecoders()
@@ -828,6 +847,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(ibchost.ModuleName)
 	paramsKeeper.Subspace(icacontrollertypes.SubModuleName)
 	paramsKeeper.Subspace(icahosttypes.SubModuleName)
+	paramsKeeper.Subspace(ammtypes.ModuleName).WithKeyTable(ammtypes.ParamKeyTable())
 
 	return paramsKeeper
 }

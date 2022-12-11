@@ -1,0 +1,13 @@
+syntax = "proto3";
+package zomb.amm.v1beta1;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/pumpkinzomb/zomb-amm/x/amm/types";
+option (gogoproto.goproto_getters_all) = false;
+
+message Pair {
+  uint64 id = 1;
+  string denom0 = 2;
+  string denom1 = 3;
+}

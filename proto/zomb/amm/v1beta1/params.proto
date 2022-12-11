@@ -1,0 +1,20 @@
+syntax = "proto3";
+package zomb.amm.v1beta1;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/pumpkinzomb/zomb-amm/x/amm/types";
+option (gogoproto.goproto_getters_all) = false;
+
+message Params {
+  option (gogoproto.goproto_stringer) = false;
+
+  string fee_rate = 1 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
+  string min_initial_liquidity = 2 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+}

@@ -1,0 +1,15 @@
+syntax = "proto3";
+package zomb.amm.v1beta1;
+
+import "gogoproto/gogo.proto";
+import "zomb/amm/v1beta1/amm.proto";
+import "zomb/amm/v1beta1/params.proto";
+
+option go_package = "github.com/pumpkinzomb/zomb-amm/x/amm/types";
+option (gogoproto.goproto_getters_all) = false;
+
+message GenesisState {
+  Params params = 1 [(gogoproto.nullable) = false];
+  uint64 last_pair_id = 2;
+  repeated Pair pairs = 3 [(gogoproto.nullable) = false];
+}

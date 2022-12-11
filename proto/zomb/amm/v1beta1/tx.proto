@@ -1,0 +1,59 @@
+syntax = "proto3";
+package zomb.amm.v1beta1;
+
+import "cosmos/base/v1beta1/coin.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/pumpkinzomb/zomb-amm/x/amm/types";
+option (gogoproto.goproto_getters_all) = false;
+
+service Msg {
+  rpc AddLiquidity(MsgAddLiquidity) returns (MsgAddLiquidityResponse);
+  rpc RemoveLiquidity(MsgRemoveLiquidity) returns (MsgRemoveLiquidityResponse);
+  rpc SwapExactIn(MsgSwapExactIn) returns (MsgSwapExactInResponse);
+  rpc SwapExactOut(MsgSwapExactOut) returns (MsgSwapExactOutResponse);
+}
+
+message MsgAddLiquidity {
+  string sender = 1;
+  repeated cosmos.base.v1beta1.Coin coins = 2 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false
+  ];
+}
+
+message MsgAddLiquidityResponse {
+  cosmos.base.v1beta1.Coin minted_share = 1 [(gogoproto.nullable) = false];
+}
+
+message MsgRemoveLiquidity {
+  string sender = 1;
+  cosmos.base.v1beta1.Coin share = 2 [(gogoproto.nullable) = false];
+}
+
+message MsgRemoveLiquidityResponse {
+  repeated cosmos.base.v1beta1.Coin withdrawn_coins = 1 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false
+  ];
+}
+
+message MsgSwapExactIn {
+  string sender = 1;
+  cosmos.base.v1beta1.Coin coin_in = 2 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin min_coin_out = 3 [(gogoproto.nullable) = false];
+}
+
+message MsgSwapExactInResponse {
+  cosmos.base.v1beta1.Coin coin_out = 1 [(gogoproto.nullable) = false];
+}
+
+message MsgSwapExactOut {
+  string sender = 1;
+  cosmos.base.v1beta1.Coin coin_out = 3 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin max_coin_in = 2 [(gogoproto.nullable) = false];
+}
+
+message MsgSwapExactOutResponse {
+  cosmos.base.v1beta1.Coin coin_in = 1 [(gogoproto.nullable) = false];
+}
