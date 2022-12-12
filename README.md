@@ -12,3 +12,17 @@ I faced a lot of protobuf generating issues during this lectures.
 
 ## How to start  
 I made a start script at root. Just use `sh start.sh`
+
+```
+// create tokenA, tokenB liquidity pool
+zombd tx amm add-liquidity 10000tokenA,10000tokenB --from zomb-master --keyring-backend test
+
+// check the pool
+zombd q amm pairs
+
+// swap tokenA to tokenB
+zombd tx amm swap-exact-in 1000tokenA 500tokenB --from zomb-master --keyring-backend test 
+
+// check after balances
+zombd q bank balances $(zombd keys show zomb-master -a --keyring-backend test)
+```
